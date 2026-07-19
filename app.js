@@ -67,6 +67,7 @@ function loadState() {
     ) {
       rounds = Math.max(0, Math.floor(parsed.rounds));
       completed = parsed.completed.map(Boolean);
+      if (completed.every(Boolean)) celebrating = true;
     }
   } catch (_) {}
 }
@@ -240,6 +241,7 @@ function setup() {
   setupInstallTip();
   elements.nextRound.addEventListener("click", beginNextRound);
   elements.resetRound.addEventListener("click", resetCurrentRound);
+  if (celebrating) showCelebration();
   if ("serviceWorker" in navigator) {
     void navigator.serviceWorker.register("./sw.js").catch(() => {});
   }
