@@ -1,0 +1,15 @@
+{
+  "name": "小家务循环",
+  "short_name": "小家务",
+  "description": "每天完成七项小家务，每完成一轮都有喝彩。",
+  "lang": "zh-CN",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait-primary",
+  "background_color": "#fffaf2",
+  "theme_color": "#fffaf2",
+  "icons": [
+    { "src": "./icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any maskable" }
+  ]
+}
