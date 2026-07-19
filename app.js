@@ -47,14 +47,13 @@ const elements = {
   installTipClose: document.querySelector("#install-tip-close"),
 };
 
-function todayKey() {
-  const now = new Date();
-  return `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, "0")}-${String(now.getDate()).padStart(2, "0")}`;
-}
-
 function saveState() {
   try {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify({ date: todayKey(), rounds, completed }));
+    localStorage.setItem(STORAGE_KEY, JSON.stringify({
+      rounds,
+      completed,
+      updatedAt: new Date().toISOString(),
+    }));
   } catch (_) {}
 }
 
@@ -62,8 +61,7 @@ function loadState() {
   try {
     const parsed = JSON.parse(localStorage.getItem(STORAGE_KEY) || "null");
     if (
-      parsed?.date === todayKey() &&
-      Number.isFinite(parsed.rounds) &&
+      Number.isFinite(parsed?.rounds) &&
       Array.isArray(parsed.completed) &&
       parsed.completed.length === tasks.length
     ) {
@@ -143,7 +141,7 @@ function render() {
   elements.roundCount.textContent = rounds;
   elements.roundNext.textContent = `正在进行第 ${rounds + 1} 轮`;
   elements.currentRoundLabel.textContent = `第 ${rounds + 1} 轮`;
-  elements.roundSummary.setAttribute("aria-label", `今天已完成 ${rounds} 轮`);
+  elements.roundSummary.setAttribute("aria-label", `累计完成 ${rounds} 轮`);
   elements.finishedCount.textContent = finished;
   elements.progressBar.style.width = `${percent}%`;
   elements.progressTrack.setAttribute("aria-valuenow", finished);
@@ -212,7 +210,7 @@ function beginNextRound() {
 
 function resetCurrentRound() {
   if (!completed.some(Boolean)) return;
-  if (window.confirm("要取消本轮已经勾选的项目吗？今日完成轮数会保留。")) {
+  if (window.confirm("要取消本轮已经勾选的项目吗？累计完成轮数会保留。")) {
     completed = tasks.map(() => false);
     saveState();
     render();
