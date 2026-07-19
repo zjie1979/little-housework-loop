@@ -1,4 +1,4 @@
-const CACHE_NAME = "little-housework-loop-github-v3";
+const CACHE_NAME = "little-housework-loop-github-v4";
 const BASE_PATH = new URL(self.registration.scope).pathname;
 const APP_SHELL = [
   BASE_PATH,
