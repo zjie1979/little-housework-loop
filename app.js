@@ -24,14 +24,22 @@ let completed = tasks.map(() => false);
 let rounds = 0;
 let celebrating = false;
 let editingTaskId = null;
+let activePage = "checkin";
 
 const elements = {
   dateLabel: document.querySelector("#date-label"),
+  brandHome: document.querySelector("#brand-home"),
+  pages: {
+    checkin: document.querySelector("#page-checkin"),
+    customize: document.querySelector("#page-customize"),
+    stats: document.querySelector("#page-stats"),
+  },
+  navButtons: [...document.querySelectorAll(".bottom-nav [data-page]")],
+  checkinKicker: document.querySelector("#checkin-kicker"),
   heroNote: document.querySelector("#hero-note"),
   roundSummary: document.querySelector("#round-summary"),
   roundSunCount: document.querySelector("#round-sun-count"),
   roundCount: document.querySelector("#round-count"),
-  roundNext: document.querySelector("#round-next"),
   currentRoundLabel: document.querySelector("#current-round-label"),
   finishedCount: document.querySelector("#finished-count"),
   totalCount: document.querySelector("#total-count"),
@@ -41,9 +49,6 @@ const elements = {
   taskList: document.querySelector("#task-list"),
   historyContent: document.querySelector("#round-history-content"),
   resetRound: document.querySelector("#reset-round"),
-  customizerToggle: document.querySelector("#customizer-toggle"),
-  customizerArrow: document.querySelector("#customizer-arrow"),
-  customizerPanel: document.querySelector("#customizer-panel"),
   taskForm: document.querySelector("#task-form"),
   formKicker: document.querySelector("#form-kicker"),
   formTitle: document.querySelector("#form-title"),
@@ -54,6 +59,14 @@ const elements = {
   taskAmountInput: document.querySelector("#task-amount-input"),
   saveTaskButton: document.querySelector("#save-task-button"),
   manageList: document.querySelector("#manage-list"),
+  statsRounds: document.querySelector("#stats-rounds"),
+  statsCurrentRound: document.querySelector("#stats-current-round"),
+  statsTaskCount: document.querySelector("#stats-task-count"),
+  statsFinishedLabel: document.querySelector("#stats-finished-label"),
+  statsPercent: document.querySelector("#stats-percent"),
+  statsProgressTrack: document.querySelector("#stats-progress-track"),
+  statsProgressBar: document.querySelector("#stats-progress-bar"),
+  statsProgressCaption: document.querySelector("#stats-progress-caption"),
   celebration: document.querySelector("#celebration"),
   confetti: document.querySelector("#confetti"),
   cheerKicker: document.querySelector("#cheer-kicker"),
@@ -117,6 +130,21 @@ function loadState() {
       if (completed.every(Boolean)) celebrating = true;
     }
   } catch (_) {}
+}
+
+function setActivePage(page) {
+  if (!elements.pages[page]) return;
+  activePage = page;
+  Object.entries(elements.pages).forEach(([name, section]) => {
+    section.hidden = name !== page;
+  });
+  elements.navButtons.forEach((button) => {
+    const selected = button.dataset.page === page;
+    button.classList.toggle("is-active", selected);
+    if (selected) button.setAttribute("aria-current", "page");
+    else button.removeAttribute("aria-current");
+  });
+  window.scrollTo({ top: 0, behavior: "smooth" });
 }
 
 function playCheer() {
@@ -237,7 +265,9 @@ function renderHistory() {
   for (let index = 0; index < rounds; index += 1) {
     const badge = document.createElement("span");
     badge.title = `第 ${index + 1} 轮已完成`;
-    badge.innerHTML = `<b>${index + 1}</b>✓`;
+    const number = document.createElement("b");
+    number.textContent = String(index + 1);
+    badge.append(number, "✓");
     badges.append(badge);
   }
   elements.historyContent.append(badges);
@@ -247,25 +277,37 @@ function render() {
   const finished = completed.filter(Boolean).length;
   const remaining = tasks.length - finished;
   const percent = Math.round((finished / tasks.length) * 100);
-  elements.heroNote.textContent = `清单里的 ${tasks.length} 件小事完成就是一轮。可以跨天慢慢完成，也可以随时自定义。`;
+  const status = finished === 0
+    ? "从最顺手的一项开始吧"
+    : remaining === 0
+      ? "本轮全部完成"
+      : `再完成 ${remaining} 项，就能收获本轮喝彩`;
+
+  elements.checkinKicker.textContent = `第 ${rounds + 1} 轮 · 跨天继续`;
+  elements.heroNote.textContent = `${tasks.length} 件小家务全部打卡，就完成一轮。`;
   elements.roundSunCount.textContent = rounds;
   elements.roundCount.textContent = rounds;
-  elements.roundNext.textContent = `正在进行第 ${rounds + 1} 轮`;
   elements.currentRoundLabel.textContent = `第 ${rounds + 1} 轮`;
-  elements.roundSummary.setAttribute("aria-label", `累计完成 ${rounds} 轮`);
+  elements.roundSummary.setAttribute("aria-label", `累计完成 ${rounds} 轮，查看统计`);
   elements.finishedCount.textContent = finished;
   elements.totalCount.textContent = tasks.length;
   elements.progressBar.style.width = `${percent}%`;
   elements.progressTrack.setAttribute("aria-valuemax", tasks.length);
   elements.progressTrack.setAttribute("aria-valuenow", finished);
   elements.progressTrack.setAttribute("aria-label", `已完成 ${finished} 项，共 ${tasks.length} 项`);
-  elements.progressCaption.textContent = finished === 0
-    ? "从最顺手的一项开始吧"
-    : remaining === 0
-      ? "本轮全部完成"
-      : `再完成 ${remaining} 项，就能收获本轮喝彩`;
+  elements.progressCaption.textContent = status;
   elements.resetRound.disabled = finished === 0;
-  elements.customizerToggle.disabled = celebrating;
+
+  elements.statsRounds.textContent = rounds;
+  elements.statsCurrentRound.textContent = rounds + 1;
+  elements.statsTaskCount.textContent = tasks.length;
+  elements.statsFinishedLabel.textContent = `已完成 ${finished} 项`;
+  elements.statsPercent.textContent = percent;
+  elements.statsProgressBar.style.width = `${percent}%`;
+  elements.statsProgressTrack.setAttribute("aria-valuenow", percent);
+  elements.statsProgressTrack.setAttribute("aria-label", `本轮完成百分之 ${percent}`);
+  elements.statsProgressCaption.textContent = status;
+
   renderTasks();
   renderManager();
   renderHistory();
@@ -309,7 +351,10 @@ function showCelebration() {
   elements.cheerLine.textContent = line;
   elements.cheerTaskCount.textContent = tasks.length;
   elements.cheerRoundCount.textContent = rounds;
-  elements.nextRound.innerHTML = `开启第 ${rounds + 1} 轮 <span aria-hidden="true">→</span>`;
+  const arrow = document.createElement("span");
+  arrow.setAttribute("aria-hidden", "true");
+  arrow.textContent = "→";
+  elements.nextRound.replaceChildren(`开启第 ${rounds + 1} 轮 `, arrow);
   createConfetti();
   elements.celebration.hidden = false;
   elements.nextRound.focus();
@@ -321,7 +366,7 @@ function beginNextRound() {
   elements.celebration.hidden = true;
   saveState();
   render();
-  window.scrollTo({ top: 0, behavior: "smooth" });
+  setActivePage("checkin");
 }
 
 function resetCurrentRound() {
@@ -331,13 +376,6 @@ function resetCurrentRound() {
     saveState();
     render();
   }
-}
-
-function setCustomizerOpen(open) {
-  elements.customizerPanel.hidden = !open;
-  elements.customizerToggle.setAttribute("aria-expanded", String(open));
-  elements.customizerArrow.textContent = open ? "收起" : "打开";
-  if (!open) resetTaskForm();
 }
 
 function resetTaskForm() {
@@ -357,7 +395,7 @@ function editTask(taskId) {
   const task = tasks.find((item) => item.id === taskId);
   if (!task) return;
   editingTaskId = task.id;
-  setCustomizerOpen(true);
+  setActivePage("customize");
   elements.taskIconInput.value = task.icon;
   elements.taskTitleInput.value = task.title;
   elements.taskDetailInput.value = task.detail;
@@ -449,12 +487,15 @@ function setup() {
   }).format(new Date());
   loadState();
   render();
+  setActivePage(activePage);
   setupInstallTip();
+  elements.brandHome.addEventListener("click", () => setActivePage("checkin"));
+  elements.roundSummary.addEventListener("click", () => setActivePage("stats"));
+  elements.navButtons.forEach((button) => {
+    button.addEventListener("click", () => setActivePage(button.dataset.page));
+  });
   elements.nextRound.addEventListener("click", beginNextRound);
   elements.resetRound.addEventListener("click", resetCurrentRound);
-  elements.customizerToggle.addEventListener("click", () => {
-    setCustomizerOpen(elements.customizerPanel.hidden);
-  });
   elements.taskForm.addEventListener("submit", saveCustomTask);
   elements.cancelEdit.addEventListener("click", resetTaskForm);
   if (celebrating) showCelebration();
