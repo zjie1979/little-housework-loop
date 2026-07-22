@@ -1,10 +1,10 @@
-const CACHE_NAME = "little-housework-loop-github-v5";
+const CACHE_NAME = "little-housework-loop-github-v6";
 const BASE_PATH = new URL(self.registration.scope).pathname;
 const APP_SHELL = [
   BASE_PATH,
   `${BASE_PATH}index.html`,
-  `${BASE_PATH}styles.css`,
-  `${BASE_PATH}app.js?v=5`,
+  `${BASE_PATH}styles.css?v=6`,
+  `${BASE_PATH}app.js?v=6`,
   `${BASE_PATH}manifest.webmanifest`,
   `${BASE_PATH}icon.svg`,
 ];
