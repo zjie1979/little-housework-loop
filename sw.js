@@ -1,12 +1,14 @@
-const CACHE_NAME = "little-housework-loop-github-v6";
+const CACHE_NAME = "little-housework-loop-github-v7";
 const BASE_PATH = new URL(self.registration.scope).pathname;
 const APP_SHELL = [
   BASE_PATH,
   `${BASE_PATH}index.html`,
-  `${BASE_PATH}styles.css?v=6`,
-  `${BASE_PATH}app.js?v=6`,
+  `${BASE_PATH}styles.css?v=7`,
+  `${BASE_PATH}app.js?v=7`,
   `${BASE_PATH}manifest.webmanifest`,
-  `${BASE_PATH}icon.svg`,
+  `${BASE_PATH}apple-touch-icon.png`,
+  `${BASE_PATH}icon-192.png`,
+  `${BASE_PATH}icon-512.png`,
 ];
 
 self.addEventListener("install", (event) => {
