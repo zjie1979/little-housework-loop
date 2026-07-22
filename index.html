@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
     <meta name="theme-color" content="#fffaf2">
     <meta name="color-scheme" content="light">
-    <meta name="description" content="小家务清单可以自定义、跨天继续，每完成一轮都有喝彩。">
+    <meta name="description" content="三页小家务循环：打卡、自定义、统计，跨天继续，每轮都有喝彩。">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="default">
     <meta name="apple-mobile-web-app-title" content="小家务循环">
@@ -14,14 +14,15 @@
     <meta property="og:locale" content="zh_CN">
     <meta property="og:site_name" content="小家务循环">
     <meta property="og:title" content="小家务循环｜跨天慢慢完成，循环不断">
-    <meta property="og:description" content="小家务清单可以自定义、跨天继续，每完成一轮都有喝彩。">
+    <meta property="og:description" content="三页小家务循环：打卡、自定义、统计，跨天继续，每轮都有喝彩。">
+    <meta property="og:image" content="https://zjie1979.github.io/little-housework-loop/og.png">
     <title>小家务循环｜跨天慢慢完成，循环不断</title>
     <link rel="canonical" href="https://zjie1979.github.io/little-housework-loop/">
     <link rel="manifest" href="./manifest.webmanifest">
-    <link rel="apple-touch-icon" href="./icon.svg">
-    <link rel="icon" type="image/svg+xml" href="./icon.svg">
-    <link rel="stylesheet" href="./styles.css?v=6">
-    <script src="./app.js?v=6" defer></script>
+    <link rel="apple-touch-icon" href="./apple-touch-icon.png">
+    <link rel="icon" type="image/png" href="./icon-192.png">
+    <link rel="stylesheet" href="./styles.css?v=7">
+    <script src="./app.js?v=7" defer></script>
   </head>
   <body>
     <main class="app-shell">
@@ -30,57 +31,66 @@
 
       <div class="app-frame">
         <header class="topbar">
-          <a class="brand" href="#top" aria-label="小家务循环，回到顶部">
+          <button type="button" class="brand brand-button" id="brand-home" aria-label="小家务循环，回到打卡页">
             <span class="brand-mark" aria-hidden="true"><span>⌂</span></span>
             <span>小家务循环</span>
-          </a>
+          </button>
           <div class="date-pill">
             <span class="date-dot" aria-hidden="true"></span>
             <span id="date-label">今天</span>
           </div>
         </header>
 
-        <section class="hero" id="top">
-          <div class="hero-copy">
-            <p class="eyebrow">CONTINUOUS LITTLE LOOP</p>
-            <h1>不求一次收完，<span>只完成眼前这一圈。</span></h1>
-            <p class="hero-note" id="hero-note">清单里的 7 件小事完成就是一轮。可以跨天慢慢完成，也可以随时自定义。</p>
+        <section class="page-view checkin-page" id="page-checkin" aria-labelledby="checkin-title">
+          <div class="hero compact-hero" id="top">
+            <div class="hero-copy">
+              <p class="eyebrow" id="checkin-kicker">第 1 轮 · 跨天继续</p>
+              <h1 id="checkin-title">只做眼前<span>这一件。</span></h1>
+              <p class="hero-note" id="hero-note">7 件小家务全部打卡，就完成一轮。</p>
+            </div>
+
+            <button type="button" class="round-card round-card-button" id="round-summary" aria-label="累计完成 0 轮，查看统计">
+              <div class="round-sun" aria-hidden="true"><span id="round-sun-count">0</span></div>
+              <div>
+                <p>累计已完成</p>
+                <strong><span id="round-count">0</span> 轮</strong>
+                <span class="round-next">点此查看统计</span>
+              </div>
+            </button>
           </div>
 
-          <aside class="round-card" id="round-summary" aria-label="累计完成 0 轮">
-            <div class="round-sun" aria-hidden="true"><span id="round-sun-count">0</span></div>
-            <div>
-              <p>累计已完成</p>
-              <strong><span id="round-count">0</span> 轮</strong>
-              <span class="round-next" id="round-next">正在进行第 1 轮</span>
+          <section class="progress-panel" aria-label="本轮进度">
+            <div class="progress-heading">
+              <div>
+                <span class="section-kicker" id="current-round-label">第 1 轮</span>
+                <h2>本轮打卡</h2>
+              </div>
+              <div class="progress-count" aria-live="polite">
+                <strong id="finished-count">0</strong><span>/ <span id="total-count">7</span></span>
+              </div>
             </div>
-          </aside>
+            <div class="progress-track" id="progress-track" role="progressbar" aria-valuemin="0" aria-valuemax="7" aria-valuenow="0" aria-label="已完成 0 项，共 7 项">
+              <span id="progress-bar"></span>
+            </div>
+            <p class="progress-caption" id="progress-caption">从最顺手的一项开始吧</p>
+          </section>
+
+          <section class="task-list" id="task-list" aria-label="小家务打卡清单"></section>
+
+          <footer class="page-footer">
+            <p>进度保存在这台设备上，跨天继续，不会在午夜清零。</p>
+            <button type="button" id="reset-round" disabled>重置本轮</button>
+          </footer>
         </section>
 
-        <section class="progress-panel" aria-label="本轮进度">
-          <div class="progress-heading">
-            <div>
-              <span class="section-kicker" id="current-round-label">第 1 轮</span>
-              <h2>本轮小家务</h2>
-            </div>
-            <div class="progress-count" aria-live="polite">
-              <strong id="finished-count">0</strong><span>/ <span id="total-count">7</span></span>
-            </div>
-          </div>
-          <div class="progress-track" id="progress-track" role="progressbar" aria-valuemin="0" aria-valuemax="7" aria-valuenow="0" aria-label="已完成 0 项，共 7 项">
-            <span id="progress-bar"></span>
-          </div>
-          <p class="progress-caption" id="progress-caption">从最顺手的一项开始吧</p>
-        </section>
+        <section class="page-view customize-page" id="page-customize" aria-labelledby="customize-title" hidden>
+          <header class="page-heading">
+            <p class="eyebrow">MY LITTLE LIST</p>
+            <h1 id="customize-title">自定义小家务</h1>
+            <p>新增、修改或删除清单。调整后会直接用于当前循环。</p>
+          </header>
 
-        <section class="task-customizer" aria-label="自定义小家务">
-          <button type="button" class="customizer-toggle" id="customizer-toggle" aria-expanded="false">
-            <span class="customizer-icon" aria-hidden="true">＋</span>
-            <span><strong>自定义小家务</strong><small>新增、修改或删除你的循环清单</small></span>
-            <span class="customizer-arrow" id="customizer-arrow" aria-hidden="true">打开</span>
-          </button>
-
-          <div class="customizer-panel" id="customizer-panel" hidden>
+          <div class="customizer-panel standalone-customizer">
             <form class="task-form" id="task-form">
               <div class="task-form-heading">
                 <div>
@@ -114,23 +124,46 @@
 
             <div class="manage-list" id="manage-list" aria-label="管理现有小家务"></div>
           </div>
+          <p class="page-note">至少保留 1 项，最多可设置 30 项。</p>
         </section>
 
-        <section class="task-list" id="task-list" aria-label="小家务打卡清单"></section>
+        <section class="page-view stats-page" id="page-stats" aria-labelledby="stats-title" hidden>
+          <header class="page-heading">
+            <p class="eyebrow">LOOP FOOTPRINT</p>
+            <h1 id="stats-title">循环统计</h1>
+            <p>每完成一轮，就留下一枚属于你的清爽印记。</p>
+          </header>
 
-        <section class="round-history" aria-label="累计循环记录">
-          <div>
-            <span class="section-kicker">循环足迹</span>
-            <h2>完成过的循环</h2>
+          <div class="stats-grid" aria-label="循环数据概览">
+            <article class="metric-card highlight"><span>累计完成</span><strong id="stats-rounds">0</strong><small>轮</small></article>
+            <article class="metric-card"><span>正在进行</span><strong id="stats-current-round">1</strong><small>轮</small></article>
+            <article class="metric-card"><span>当前清单</span><strong id="stats-task-count">7</strong><small>项</small></article>
           </div>
-          <div id="round-history-content"><p>第一枚小太阳，正在等你点亮。</p></div>
-        </section>
 
-        <footer>
-          <p>进度会保存在这台设备上，跨天继续，不会在午夜清零。</p>
-          <button type="button" id="reset-round" disabled>重置本轮</button>
-        </footer>
+          <section class="progress-panel stats-progress" aria-label="统计页本轮进度">
+            <div class="progress-heading">
+              <div><span class="section-kicker">本轮状态</span><h2 id="stats-finished-label">已完成 0 项</h2></div>
+              <div class="progress-count"><strong id="stats-percent">0</strong><span>%</span></div>
+            </div>
+            <div class="progress-track" id="stats-progress-track" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" aria-label="本轮完成百分之 0">
+              <span id="stats-progress-bar"></span>
+            </div>
+            <p class="progress-caption" id="stats-progress-caption">从最顺手的一项开始吧</p>
+          </section>
+
+          <section class="round-history stats-history" aria-label="累计循环记录">
+            <div><span class="section-kicker">循环足迹</span><h2>完成过的循环</h2></div>
+            <div id="round-history-content"><p>第一枚小太阳，正在等你点亮。</p></div>
+          </section>
+          <p class="page-note">数据只保存在当前设备，跨天继续，不会自动上传。</p>
+        </section>
       </div>
+
+      <nav class="bottom-nav" aria-label="主要页面">
+        <button type="button" class="is-active" data-page="checkin" aria-current="page"><span aria-hidden="true">✓</span><strong>打卡</strong></button>
+        <button type="button" data-page="customize"><span aria-hidden="true">＋</span><strong>自定义</strong></button>
+        <button type="button" data-page="stats"><span aria-hidden="true">◎</span><strong>统计</strong></button>
+      </nav>
 
       <aside class="install-tip" id="install-tip" aria-label="安装到 iPhone 主屏幕" hidden>
         <button type="button" class="install-tip-close" id="install-tip-close" aria-label="关闭安装提示">×</button>
