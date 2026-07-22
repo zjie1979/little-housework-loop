@@ -53,7 +53,7 @@ button {
   position: fixed;
   z-index: 15;
   right: 18px;
-  bottom: calc(18px + env(safe-area-inset-bottom));
+  bottom: calc(104px + env(safe-area-inset-bottom));
   display: grid;
   width: min(calc(100% - 36px), 380px);
   grid-template-columns: 48px minmax(0, 1fr);
@@ -153,7 +153,7 @@ button {
   z-index: 1;
   width: min(100% - 36px, 940px);
   margin: 0 auto;
-  padding: 24px 0 48px;
+  padding: 24px 0 132px;
 }
 
 .topbar {
@@ -172,6 +172,13 @@ button {
   font-weight: 800;
   letter-spacing: 0.04em;
   text-decoration: none;
+}
+
+.brand-button {
+  padding: 0;
+  border: 0;
+  background: transparent;
+  cursor: pointer;
 }
 
 .brand-mark {
@@ -221,6 +228,39 @@ button {
   margin-bottom: 38px;
 }
 
+.compact-hero {
+  margin-bottom: 22px;
+}
+
+.compact-hero h1 {
+  font-size: clamp(36px, 5.4vw, 58px);
+}
+
+.page-view {
+  animation: page-in 260ms ease-out both;
+}
+
+.page-heading {
+  margin: 6px 0 24px;
+}
+
+.page-heading h1 {
+  margin: 0;
+  color: #283d33;
+  font-size: clamp(34px, 5.2vw, 52px);
+  font-weight: 900;
+  letter-spacing: -0.045em;
+  line-height: 1.12;
+}
+
+.page-heading > p:last-child {
+  max-width: 570px;
+  margin: 12px 0 0;
+  color: #78837d;
+  font-size: 13px;
+  line-height: 1.7;
+}
+
 .eyebrow,
 .section-kicker,
 .cheer-kicker {
@@ -265,6 +305,18 @@ button {
   background: rgba(255, 255, 255, 0.75);
   box-shadow: 0 20px 50px rgba(68, 91, 79, 0.08);
   backdrop-filter: blur(12px);
+}
+
+.round-card-button {
+  cursor: pointer;
+  color: inherit;
+  text-align: left;
+  transition: transform 180ms ease, box-shadow 180ms ease;
+}
+
+.round-card-button:hover {
+  box-shadow: 0 24px 56px rgba(68, 91, 79, 0.12);
+  transform: translateY(-2px);
 }
 
 .round-sun {
@@ -444,6 +496,10 @@ button {
   border-radius: 24px;
   background: rgba(255, 255, 255, 0.9);
   box-shadow: 0 14px 38px rgba(54, 80, 66, 0.07);
+}
+
+.standalone-customizer {
+  margin-top: 0;
 }
 
 .task-form {
@@ -762,6 +818,68 @@ footer button:focus-visible,
   background: rgba(241, 249, 243, 0.58);
 }
 
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 14px;
+  margin-bottom: 17px;
+}
+
+.metric-card {
+  display: grid;
+  min-height: 140px;
+  align-content: center;
+  justify-items: center;
+  padding: 20px;
+  border: 1px solid var(--line);
+  border-radius: 25px;
+  background: rgba(255, 255, 255, 0.82);
+  box-shadow: 0 12px 34px rgba(57, 81, 68, 0.06);
+  text-align: center;
+}
+
+.metric-card.highlight {
+  border-color: rgba(242, 135, 83, 0.2);
+  background: linear-gradient(145deg, #fff8e9, #fffdf8);
+}
+
+.metric-card span {
+  color: #8b9690;
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.metric-card strong {
+  margin: 5px 0 1px;
+  color: var(--green-dark);
+  font-size: 42px;
+  line-height: 1;
+}
+
+.metric-card.highlight strong {
+  color: var(--orange);
+}
+
+.metric-card small {
+  color: #9aa19d;
+  font-size: 11px;
+}
+
+.stats-progress {
+  margin-bottom: 17px;
+}
+
+.stats-history {
+  margin-top: 0;
+}
+
+.page-note {
+  margin: 18px 3px 0;
+  color: #929b96;
+  font-size: 11px;
+  line-height: 1.7;
+}
+
 .round-history p {
   margin: 0;
   color: #87938c;
@@ -823,6 +941,65 @@ footer button:disabled {
   cursor: default;
   opacity: 0.35;
   text-decoration: none;
+}
+
+.bottom-nav {
+  position: fixed;
+  z-index: 12;
+  left: 50%;
+  bottom: calc(16px + env(safe-area-inset-bottom));
+  display: grid;
+  width: min(calc(100% - 32px), 430px);
+  grid-template-columns: repeat(3, 1fr);
+  gap: 5px;
+  padding: 7px;
+  border: 1px solid rgba(255, 255, 255, 0.9);
+  border-radius: 24px;
+  background: rgba(39, 58, 49, 0.94);
+  box-shadow: 0 18px 50px rgba(30, 48, 39, 0.26);
+  backdrop-filter: blur(18px);
+  transform: translateX(-50%);
+}
+
+.bottom-nav button {
+  display: grid;
+  min-height: 58px;
+  place-items: center;
+  align-content: center;
+  gap: 3px;
+  padding: 6px 8px;
+  border: 0;
+  border-radius: 18px;
+  background: transparent;
+  color: rgba(255, 255, 255, 0.58);
+  cursor: pointer;
+  transition: color 160ms ease, background 160ms ease, transform 160ms ease;
+}
+
+.bottom-nav button:active {
+  transform: scale(0.97);
+}
+
+.bottom-nav button.is-active {
+  background: rgba(255, 255, 255, 0.13);
+  color: white;
+}
+
+.bottom-nav button > span {
+  font-size: 21px;
+  line-height: 1;
+}
+
+.bottom-nav button strong {
+  font-size: 11px;
+  letter-spacing: 0.03em;
+}
+
+.brand-button:focus-visible,
+.round-card-button:focus-visible,
+.bottom-nav button:focus-visible {
+  outline: 3px solid rgba(242, 135, 83, 0.32);
+  outline-offset: 2px;
 }
 
 .celebration {
@@ -982,6 +1159,11 @@ footer button:disabled {
   to { opacity: 1; transform: translateY(0) scale(1); }
 }
 
+@keyframes page-in {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
 @media (max-width: 760px) {
   .app-frame {
     width: min(100% - 28px, 560px);
@@ -989,7 +1171,7 @@ footer button:disabled {
   }
 
   .topbar {
-    padding-bottom: 30px;
+    padding-bottom: 24px;
   }
 
   .brand {
@@ -1007,6 +1189,19 @@ footer button:disabled {
     margin-bottom: 26px;
   }
 
+  .compact-hero h1 {
+    font-size: clamp(34px, 10.2vw, 46px);
+  }
+
+  .page-heading {
+    margin-top: 2px;
+    margin-bottom: 20px;
+  }
+
+  .page-heading h1 {
+    font-size: 36px;
+  }
+
   .hero h1 {
     font-size: clamp(38px, 11.5vw, 54px);
   }
@@ -1018,6 +1213,20 @@ footer button:disabled {
 
   .round-card {
     width: 100%;
+  }
+
+  .stats-grid {
+    gap: 9px;
+  }
+
+  .metric-card {
+    min-height: 112px;
+    padding: 14px 8px;
+    border-radius: 20px;
+  }
+
+  .metric-card strong {
+    font-size: 34px;
   }
 
   .round-sun {
@@ -1080,13 +1289,23 @@ footer button:disabled {
     align-items: flex-start;
     flex-direction: column;
     gap: 10px;
-    padding-bottom: calc(30px + env(safe-area-inset-bottom));
+    padding-bottom: 8px;
   }
 
   .install-tip {
     right: 14px;
-    bottom: calc(14px + env(safe-area-inset-bottom));
+    bottom: calc(98px + env(safe-area-inset-bottom));
     width: calc(100% - 28px);
+  }
+
+  .bottom-nav {
+    bottom: 0;
+    width: 100%;
+    padding: 7px 12px calc(7px + env(safe-area-inset-bottom));
+    border-right: 0;
+    border-bottom: 0;
+    border-left: 0;
+    border-radius: 24px 24px 0 0;
   }
 
   .cheer-card {
