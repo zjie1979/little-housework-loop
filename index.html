@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
     <meta name="theme-color" content="#fffaf2">
     <meta name="color-scheme" content="light">
-    <meta name="description" content="7 项小家务可以跨天慢慢完成，每完成一轮都有喝彩。">
+    <meta name="description" content="小家务清单可以自定义、跨天继续，每完成一轮都有喝彩。">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="default">
     <meta name="apple-mobile-web-app-title" content="小家务循环">
@@ -14,14 +14,14 @@
     <meta property="og:locale" content="zh_CN">
     <meta property="og:site_name" content="小家务循环">
     <meta property="og:title" content="小家务循环｜跨天慢慢完成，循环不断">
-    <meta property="og:description" content="7 项小家务可以跨天慢慢完成，每完成一轮都有喝彩。">
+    <meta property="og:description" content="小家务清单可以自定义、跨天继续，每完成一轮都有喝彩。">
     <title>小家务循环｜跨天慢慢完成，循环不断</title>
     <link rel="canonical" href="https://zjie1979.github.io/little-housework-loop/">
     <link rel="manifest" href="./manifest.webmanifest">
     <link rel="apple-touch-icon" href="./icon.svg">
     <link rel="icon" type="image/svg+xml" href="./icon.svg">
-    <link rel="stylesheet" href="./styles.css">
-    <script src="./app.js?v=5" defer></script>
+    <link rel="stylesheet" href="./styles.css?v=6">
+    <script src="./app.js?v=6" defer></script>
   </head>
   <body>
     <main class="app-shell">
@@ -44,7 +44,7 @@
           <div class="hero-copy">
             <p class="eyebrow">CONTINUOUS LITTLE LOOP</p>
             <h1>不求一次收完，<span>只完成眼前这一圈。</span></h1>
-            <p class="hero-note">7 件小事完成就是一轮。可以跨天慢慢完成，每一次归位都值得喝彩。</p>
+            <p class="hero-note" id="hero-note">清单里的 7 件小事完成就是一轮。可以跨天慢慢完成，也可以随时自定义。</p>
           </div>
 
           <aside class="round-card" id="round-summary" aria-label="累计完成 0 轮">
@@ -64,13 +64,56 @@
               <h2>本轮小家务</h2>
             </div>
             <div class="progress-count" aria-live="polite">
-              <strong id="finished-count">0</strong><span>/ 7</span>
+              <strong id="finished-count">0</strong><span>/ <span id="total-count">7</span></span>
             </div>
           </div>
           <div class="progress-track" id="progress-track" role="progressbar" aria-valuemin="0" aria-valuemax="7" aria-valuenow="0" aria-label="已完成 0 项，共 7 项">
             <span id="progress-bar"></span>
           </div>
           <p class="progress-caption" id="progress-caption">从最顺手的一项开始吧</p>
+        </section>
+
+        <section class="task-customizer" aria-label="自定义小家务">
+          <button type="button" class="customizer-toggle" id="customizer-toggle" aria-expanded="false">
+            <span class="customizer-icon" aria-hidden="true">＋</span>
+            <span><strong>自定义小家务</strong><small>新增、修改或删除你的循环清单</small></span>
+            <span class="customizer-arrow" id="customizer-arrow" aria-hidden="true">打开</span>
+          </button>
+
+          <div class="customizer-panel" id="customizer-panel" hidden>
+            <form class="task-form" id="task-form">
+              <div class="task-form-heading">
+                <div>
+                  <span class="section-kicker" id="form-kicker">添加一项</span>
+                  <h2 id="form-title">新的小家务</h2>
+                </div>
+                <button type="button" class="text-button" id="cancel-edit" hidden>取消修改</button>
+              </div>
+
+              <div class="task-form-grid">
+                <label class="task-field icon-field">
+                  <span>图标</span>
+                  <input id="task-icon-input" value="🧹" maxlength="8" inputmode="text" aria-label="小家务图标">
+                </label>
+                <label class="task-field title-field">
+                  <span>名称（必填）</span>
+                  <input id="task-title-input" maxlength="24" placeholder="例如：整理鞋柜" required>
+                </label>
+                <label class="task-field detail-field">
+                  <span>怎么做</span>
+                  <input id="task-detail-input" maxlength="40" placeholder="例如：归位 3 双鞋">
+                </label>
+                <label class="task-field amount-field">
+                  <span>数量标签</span>
+                  <input id="task-amount-input" maxlength="12" placeholder="例如：3 双">
+                </label>
+              </div>
+
+              <button type="submit" class="save-task-button" id="save-task-button">添加到循环</button>
+            </form>
+
+            <div class="manage-list" id="manage-list" aria-label="管理现有小家务"></div>
+          </div>
         </section>
 
         <section class="task-list" id="task-list" aria-label="小家务打卡清单"></section>
@@ -106,7 +149,7 @@
           <h2 id="cheer-title">第 1 轮，完成啦！</h2>
           <p id="cheer-line">家里又轻盈了一圈！</p>
           <div class="cheer-stats">
-            <span><b>7</b>项小家务</span>
+            <span><b id="cheer-task-count">7</b>项小家务</span>
             <span><b id="cheer-round-count">1</b>累计轮数</span>
           </div>
           <button type="button" id="next-round">开启第 2 轮 <span aria-hidden="true">→</span></button>
