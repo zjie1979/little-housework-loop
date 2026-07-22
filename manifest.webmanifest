@@ -1,7 +1,7 @@
 {
   "name": "小家务循环",
   "short_name": "小家务",
-  "description": "七项小家务可以跨天慢慢完成，每完成一轮都有喝彩。",
+  "description": "小家务清单可以自定义、跨天继续，每完成一轮都有喝彩。",
   "lang": "zh-CN",
   "start_url": "./",
   "scope": "./",
