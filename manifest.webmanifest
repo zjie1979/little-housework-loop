@@ -1,7 +1,7 @@
 {
   "name": "小家务循环",
   "short_name": "小家务",
-  "description": "小家务清单可以自定义、跨天继续，每完成一轮都有喝彩。",
+  "description": "三页小家务循环：打卡、自定义、统计，跨天继续，每轮都有喝彩。",
   "lang": "zh-CN",
   "start_url": "./",
   "scope": "./",
@@ -10,6 +10,7 @@
   "background_color": "#fffaf2",
   "theme_color": "#fffaf2",
   "icons": [
-    { "src": "./icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any maskable" }
+    { "src": "./icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any maskable" },
+    { "src": "./icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any maskable" }
   ]
 }
